@@ -197,7 +197,6 @@ public class SignIn extends javax.swing.JFrame {
             st = cn.createStatement();
             rs = st.executeQuery("SELECT * FROM tb_user WHERE username = '" + txtUsername.getText() + "' AND password = '" + txtPasswd.getText() + "'");
             
-            
             if(rs.next()){
                 JOptionPane.showMessageDialog(null, "Sign In Successful", "Sign In", JOptionPane.INFORMATION_MESSAGE);
                 MainApp main = new MainApp();
