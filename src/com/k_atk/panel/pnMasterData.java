@@ -8,12 +8,12 @@ package com.k_atk.panel;
  *
  * @author karel
  */
-public class pnMasterData extends javax.swing.JPanel {
+public class PnMasterData extends javax.swing.JPanel {
 
     /**
      * Creates new form pnMasterData
      */
-    public pnMasterData() {
+    public PnMasterData() {
         initComponents();
     }
 

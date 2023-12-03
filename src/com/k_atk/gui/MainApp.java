@@ -4,8 +4,12 @@
  */
 package com.k_atk.gui;
 
+import com.k_atk.panel.PnCasher;
+import com.k_atk.panel.PnMasterData;
+import com.k_atk.panel.PnTransaksi;
 import java.awt.*;
 import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 
 /**
  *
@@ -17,11 +21,18 @@ public class MainApp extends javax.swing.JFrame {
      * Creates new form MainApp
      */
     
+    public static String activeBtn = "casher";
+    
     public MainApp() {
         initComponents();
         
         ImageIcon icon = new ImageIcon("src/com/k_atk/assets/img/icon/icon-48x48.png");
         setIconImage(icon.getImage());
+        PnCasher casher = new PnCasher();
+        addRemovePanels(casher);
+        if(activeBtn.equals("casher")){
+            btnCasher.setBackground(new Color(0,0,153));
+        }
     }
 
     /**
@@ -38,16 +49,16 @@ public class MainApp extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        pnCasher = new javax.swing.JPanel();
+        btnCasher = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        pnData = new javax.swing.JPanel();
+        btnMaster = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        pnTransaksi = new javax.swing.JPanel();
+        btnTransaksi = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         pnLogout = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        pnUtama = new javax.swing.JPanel();
         pnHome = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
@@ -113,14 +124,17 @@ public class MainApp extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Welcome!, Admin");
 
-        pnCasher.setBackground(new java.awt.Color(0, 0, 51));
-        pnCasher.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pnCasher.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnCasher.setBackground(new java.awt.Color(0, 0, 51));
+        btnCasher.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCasher.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnCasherMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnCasherMouseEntered(evt);
+                btnCasherMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnCasherMouseExited(evt);
+                btnCasherMouseExited(evt);
             }
         });
 
@@ -129,29 +143,32 @@ public class MainApp extends javax.swing.JFrame {
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/k_atk/assets/img/icon/icons8_online_money_transfer_32px.png"))); // NOI18N
         jLabel5.setText(" Casher");
 
-        javax.swing.GroupLayout pnCasherLayout = new javax.swing.GroupLayout(pnCasher);
-        pnCasher.setLayout(pnCasherLayout);
-        pnCasherLayout.setHorizontalGroup(
-            pnCasherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnCasherLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnCasherLayout = new javax.swing.GroupLayout(btnCasher);
+        btnCasher.setLayout(btnCasherLayout);
+        btnCasherLayout.setHorizontalGroup(
+            btnCasherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnCasherLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        pnCasherLayout.setVerticalGroup(
-            pnCasherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        btnCasherLayout.setVerticalGroup(
+            btnCasherLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
         );
 
-        pnData.setBackground(new java.awt.Color(0, 0, 51));
-        pnData.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pnData.setPreferredSize(new java.awt.Dimension(132, 43));
-        pnData.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnMaster.setBackground(new java.awt.Color(0, 0, 51));
+        btnMaster.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMaster.setPreferredSize(new java.awt.Dimension(132, 43));
+        btnMaster.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnMasterMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnDataMouseEntered(evt);
+                btnMasterMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnDataMouseExited(evt);
+                btnMasterMouseExited(evt);
             }
         });
 
@@ -160,32 +177,35 @@ public class MainApp extends javax.swing.JFrame {
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/k_atk/assets/img/icon/icons8_stack_32px.png"))); // NOI18N
         jLabel4.setText(" Master Data");
 
-        javax.swing.GroupLayout pnDataLayout = new javax.swing.GroupLayout(pnData);
-        pnData.setLayout(pnDataLayout);
-        pnDataLayout.setHorizontalGroup(
-            pnDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnDataLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnMasterLayout = new javax.swing.GroupLayout(btnMaster);
+        btnMaster.setLayout(btnMasterLayout);
+        btnMasterLayout.setHorizontalGroup(
+            btnMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnMasterLayout.createSequentialGroup()
                 .addContainerGap(28, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addGap(14, 14, 14))
         );
-        pnDataLayout.setVerticalGroup(
-            pnDataLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnDataLayout.createSequentialGroup()
+        btnMasterLayout.setVerticalGroup(
+            btnMasterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnMasterLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 31, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        pnTransaksi.setBackground(new java.awt.Color(0, 0, 51));
-        pnTransaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        pnTransaksi.setPreferredSize(new java.awt.Dimension(132, 43));
-        pnTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnTransaksi.setBackground(new java.awt.Color(0, 0, 51));
+        btnTransaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnTransaksi.setPreferredSize(new java.awt.Dimension(132, 43));
+        btnTransaksi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnTransaksiMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                pnTransaksiMouseEntered(evt);
+                btnTransaksiMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                pnTransaksiMouseExited(evt);
+                btnTransaksiMouseExited(evt);
             }
         });
 
@@ -194,18 +214,18 @@ public class MainApp extends javax.swing.JFrame {
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/k_atk/assets/img/icon/icons8_cash_in_hand_32px.png"))); // NOI18N
         jLabel6.setText(" Transaksi");
 
-        javax.swing.GroupLayout pnTransaksiLayout = new javax.swing.GroupLayout(pnTransaksi);
-        pnTransaksi.setLayout(pnTransaksiLayout);
-        pnTransaksiLayout.setHorizontalGroup(
-            pnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnTransaksiLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnTransaksiLayout = new javax.swing.GroupLayout(btnTransaksi);
+        btnTransaksi.setLayout(btnTransaksiLayout);
+        btnTransaksiLayout.setHorizontalGroup(
+            btnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnTransaksiLayout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addComponent(jLabel6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        pnTransaksiLayout.setVerticalGroup(
-            pnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnTransaksiLayout.createSequentialGroup()
+        btnTransaksiLayout.setVerticalGroup(
+            btnTransaksiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnTransaksiLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, Short.MAX_VALUE)
                 .addContainerGap())
@@ -253,7 +273,7 @@ public class MainApp extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnCasher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnCasher, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,8 +283,8 @@ public class MainApp extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(27, 27, 27))))
-            .addComponent(pnData, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-            .addComponent(pnTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+            .addComponent(btnMaster, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
+            .addComponent(btnTransaksi, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
             .addComponent(pnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(43, 43, 43)
@@ -279,11 +299,11 @@ public class MainApp extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
                 .addGap(41, 41, 41)
-                .addComponent(pnCasher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCasher, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnMaster, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(pnTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 123, Short.MAX_VALUE)
                 .addComponent(pnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
@@ -293,8 +313,8 @@ public class MainApp extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 170, 510));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        pnUtama.setBackground(new java.awt.Color(255, 255, 255));
+        pnUtama.setLayout(new java.awt.BorderLayout());
 
         pnHome.setBackground(new java.awt.Color(255, 255, 255));
         pnHome.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
@@ -530,37 +550,49 @@ public class MainApp extends javax.swing.JFrame {
                 .addGap(246, 246, 246))
         );
 
-        jPanel3.add(pnHome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 890, 490));
+        pnUtama.add(pnHome, java.awt.BorderLayout.CENTER);
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 910, 510));
+        getContentPane().add(pnUtama, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 910, 510));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void pnCasherMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnCasherMouseEntered
-        pnCasher.setBackground(new Color(0,0,102));
-    }//GEN-LAST:event_pnCasherMouseEntered
+    private void btnCasherMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCasherMouseEntered
+        btnCasher.setBackground(new Color(0,0,102));
+    }//GEN-LAST:event_btnCasherMouseEntered
 
-    private void pnCasherMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnCasherMouseExited
-        pnCasher.setBackground(new Color(0,0,51));
-    }//GEN-LAST:event_pnCasherMouseExited
+    private void btnCasherMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCasherMouseExited
+        if(activeBtn.equals("casher")){
+            btnCasher.setBackground(new Color(0,0,153));
+        } else {
+            btnCasher.setBackground(new Color(0,0,51));
+        }
+    }//GEN-LAST:event_btnCasherMouseExited
 
-    private void pnDataMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnDataMouseEntered
-        pnData.setBackground(new Color(0,0,102));
-    }//GEN-LAST:event_pnDataMouseEntered
+    private void btnMasterMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasterMouseEntered
+        btnMaster.setBackground(new Color(0,0,102));
+    }//GEN-LAST:event_btnMasterMouseEntered
 
-    private void pnDataMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnDataMouseExited
-        pnData.setBackground(new Color(0,0,51));
-    }//GEN-LAST:event_pnDataMouseExited
+    private void btnMasterMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasterMouseExited
+        if(activeBtn.equals("master")){
+            btnMaster.setBackground(new Color(0,0,153));
+        } else {
+            btnMaster.setBackground(new Color(0,0,51));
+        }
+    }//GEN-LAST:event_btnMasterMouseExited
 
-    private void pnTransaksiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnTransaksiMouseEntered
-        pnTransaksi.setBackground(new Color(0,0,102));
-    }//GEN-LAST:event_pnTransaksiMouseEntered
+    private void btnTransaksiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseEntered
+        btnTransaksi.setBackground(new Color(0,0,102));
+    }//GEN-LAST:event_btnTransaksiMouseEntered
 
-    private void pnTransaksiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnTransaksiMouseExited
-        pnTransaksi.setBackground(new Color(0,0,51));
-    }//GEN-LAST:event_pnTransaksiMouseExited
+    private void btnTransaksiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseExited
+        if(activeBtn.equals("transaksi")){
+            btnTransaksi.setBackground(new Color(0,0,153));
+        } else {
+            btnTransaksi.setBackground(new Color(0,0,51));
+        }
+    }//GEN-LAST:event_btnTransaksiMouseExited
 
     private void pnLogoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnLogoutMouseEntered
         pnLogout.setBackground(new Color(0,0,102));
@@ -585,6 +617,36 @@ public class MainApp extends javax.swing.JFrame {
     private void btnSearchMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseExited
         btnSearch.setBackground(new Color(0,51,204));
     }//GEN-LAST:event_btnSearchMouseExited
+
+    private void btnMasterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasterMouseClicked
+        // TODO add your handling code here:
+        activeBtn = "master";
+        PnMasterData masterData = new PnMasterData();
+        addRemovePanels(masterData);
+        if(activeBtn.equals("master")){
+            btnMaster.setBackground(new Color(0,0,153));
+        }
+    }//GEN-LAST:event_btnMasterMouseClicked
+
+    private void btnCasherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCasherMouseClicked
+        // TODO add your handling code here:
+        activeBtn = "casher";
+        PnCasher casher = new PnCasher();
+        addRemovePanels(casher);
+        if(activeBtn.equals("casher")){
+            btnCasher.setBackground(new Color(0,0,153));
+        }
+    }//GEN-LAST:event_btnCasherMouseClicked
+
+    private void btnTransaksiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseClicked
+        // TODO add your handling code here:
+        activeBtn = "transaksi";
+        PnTransaksi transaksi = new PnTransaksi();
+        addRemovePanels(transaksi);
+        if(activeBtn.equals("transaksi")){
+            btnTransaksi.setBackground(new Color(0,0,153));
+        }
+    }//GEN-LAST:event_btnTransaksiMouseClicked
 
     /**
      * @param args the command line arguments
@@ -622,8 +684,11 @@ public class MainApp extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel btnCasher;
+    private javax.swing.JPanel btnMaster;
     private javax.swing.JPanel btnSearch;
     private javax.swing.JPanel btnTambah;
+    private javax.swing.JPanel btnTransaksi;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -645,15 +710,12 @@ public class MainApp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JPanel pnCasher;
-    private javax.swing.JPanel pnData;
     private javax.swing.JPanel pnHome;
     private javax.swing.JPanel pnLogout;
-    private javax.swing.JPanel pnTransaksi;
+    private javax.swing.JPanel pnUtama;
     private javax.swing.JTextField txtBayar;
     private javax.swing.JTextField txtHarga;
     private javax.swing.JTextField txtId;
@@ -662,4 +724,13 @@ public class MainApp extends javax.swing.JFrame {
     private javax.swing.JTextField txtSubTotalBarang;
     private javax.swing.JTextField txtTotalBayar;
     // End of variables declaration//GEN-END:variables
+
+    private void addRemovePanels(JPanel p){
+        if(pnHome.getComponentCount() > 0){
+            pnUtama.removeAll();
+        }
+        pnUtama.add(p);
+        pnUtama.revalidate();
+        pnUtama.repaint();
+    }
 }
