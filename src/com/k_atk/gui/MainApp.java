@@ -235,6 +235,9 @@ public class MainApp extends javax.swing.JFrame {
         pnLogout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         pnLogout.setPreferredSize(new java.awt.Dimension(132, 43));
         pnLogout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnLogoutMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 pnLogoutMouseEntered(evt);
             }
@@ -671,6 +674,12 @@ public class MainApp extends javax.swing.JFrame {
             btnMaster.setBackground(new Color(0,0,51));
         }
     }//GEN-LAST:event_btnTransaksiMouseClicked
+
+    private void pnLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnLogoutMouseClicked
+        SignIn signin = new SignIn();
+        signin.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_pnLogoutMouseClicked
 
     /**
      * @param args the command line arguments
