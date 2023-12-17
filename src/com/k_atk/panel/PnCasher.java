@@ -142,11 +142,11 @@ public class PnCasher extends javax.swing.JPanel {
 
             },
             new String [] {
-                "No", "Id Barang", "Nama Barang", "Harga", "Quantity", "Sub-Total", "Aksi"
+                "No", "Id Barang", "Nama Barang", "Harga", "Quantity", "Sub-Total", "Total"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {

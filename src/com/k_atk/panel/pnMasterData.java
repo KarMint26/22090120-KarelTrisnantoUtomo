@@ -4,17 +4,38 @@
  */
 package com.k_atk.panel;
 
+import com.k_atk.utills.ConnectionDatabase;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author karel
  */
 public class PnMasterData extends javax.swing.JPanel {
+    public Statement st; // memberikan statement perintah sql, select insert delete
+    public ResultSet rs; // membaca data di dalam db, membaca record di db
+    Connection cn = ConnectionDatabase.OpenConnection();
 
     /**
      * Creates new form pnMasterData
      */
     public PnMasterData() {
         initComponents();
+        refreshTable();
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < 4; i++) {
+            tb_produk.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        
+        PnTransaksi.centerHeaderTable(tb_produk);
     }
 
     /**
@@ -27,17 +48,61 @@ public class PnMasterData extends javax.swing.JPanel {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tb_produk = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 28)); // NOI18N
-        jLabel1.setText("DATA BARANG");
+        jLabel1.setText("DATA PRODUK");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+
+        tb_produk.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "ID Produk", "Nama Produk", "Harga Produk", "Stok Produk"
+            }
+        ));
+        tb_produk.setRowHeight(40);
+        tb_produk.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        tb_produk.setShowGrid(true);
+        jScrollPane1.setViewportView(tb_produk);
+
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 257, 720, 240));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tb_produk;
     // End of variables declaration//GEN-END:variables
+
+    private void refreshTable(){
+       try {
+            DefaultTableModel m = (DefaultTableModel) tb_produk.getModel();
+            
+            String q = "SELECT * FROM tb_produk";
+            Statement s = cn.createStatement();
+            ResultSet r = s.executeQuery(q);
+            m.getDataVector().removeAllElements();
+            while (r.next()) {
+                String id_produk = r.getString("produk_id");
+                String nama = r.getString("nama_produk");
+                int harga = r.getInt("harga_produk");
+                int stok = r.getInt("stok_produk");
+                Object[] data = {id_produk,nama,harga,stok};
+                m.addRow(data);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("error: " + e.getMessage());
+        }
+    }
 }

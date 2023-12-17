@@ -4,19 +4,43 @@
  */
 package com.k_atk.panel;
 
+import com.k_atk.utills.ConnectionDatabase;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JLabel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
  * @author karel
  */
 public class PnTransaksi extends javax.swing.JPanel {
+    public Statement st; // memberikan statement perintah sql, select insert delete
+    public ResultSet rs; // membaca data di dalam db, membaca record di db
+    Connection cn = ConnectionDatabase.OpenConnection();
 
     /**
      * Creates new form pnTransaksi
      */
     public PnTransaksi() {
         initComponents();
+        refreshTable();
+        
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < 3; i++) {
+            tb_transaksi.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+        centerHeaderTable(tb_transaksi);
     }
 
     /**
@@ -30,10 +54,10 @@ public class PnTransaksi extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jTextField1 = new javax.swing.JTextField();
-        btnSearch = new javax.swing.JPanel();
+        tb_transaksi = new javax.swing.JTable();
+        btn_cb = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
+        cb_bulan = new javax.swing.JComboBox<>();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(926, 734));
@@ -43,7 +67,8 @@ public class PnTransaksi extends javax.swing.JPanel {
         jLabel1.setText("DAFTAR TRANSAKSI");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(325, 20, -1, -1));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tb_transaksi.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        tb_transaksi.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null},
                 {null, null, null},
@@ -53,60 +78,158 @@ public class PnTransaksi extends javax.swing.JPanel {
             new String [] {
                 "ID Transaksi", "Tanggal Transaksi", "Jumlah Transaksi"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 760, 360));
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 530, 40));
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tb_transaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.MOVE_CURSOR));
+        tb_transaksi.setRowHeight(40);
+        tb_transaksi.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        tb_transaksi.setShowGrid(true);
+        jScrollPane1.setViewportView(tb_transaksi);
 
-        btnSearch.setBackground(new java.awt.Color(0, 51, 204));
-        btnSearch.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 760, 350));
+
+        btn_cb.setBackground(new java.awt.Color(0, 51, 204));
+        btn_cb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btn_cb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btn_cbMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnSearchMouseEntered(evt);
+                btn_cbMouseEntered(evt);
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnSearchMouseExited(evt);
+                btn_cbMouseExited(evt);
             }
         });
 
         jLabel19.setBackground(new java.awt.Color(255, 255, 255));
         jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/k_atk/assets/img/icon/icons8_search_24px_1.png"))); // NOI18N
 
-        javax.swing.GroupLayout btnSearchLayout = new javax.swing.GroupLayout(btnSearch);
-        btnSearch.setLayout(btnSearchLayout);
-        btnSearchLayout.setHorizontalGroup(
-            btnSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnSearchLayout.createSequentialGroup()
+        javax.swing.GroupLayout btn_cbLayout = new javax.swing.GroupLayout(btn_cb);
+        btn_cb.setLayout(btn_cbLayout);
+        btn_cbLayout.setHorizontalGroup(
+            btn_cbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_cbLayout.createSequentialGroup()
                 .addContainerGap(10, Short.MAX_VALUE)
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        btnSearchLayout.setVerticalGroup(
-            btnSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnSearchLayout.createSequentialGroup()
+        btn_cbLayout.setVerticalGroup(
+            btn_cbLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btn_cbLayout.createSequentialGroup()
                 .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 80, 40, -1));
+        add(btn_cb, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 80, 40, -1));
+
+        cb_bulan.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 14)); // NOI18N
+        cb_bulan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Data", "Juli", "Agustus", "September", "Oktober", "November", "Desember" }));
+        add(cb_bulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 82, 460, 40));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSearchMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseEntered
-        btnSearch.setBackground(new Color(0,0,153));
-    }//GEN-LAST:event_btnSearchMouseEntered
+    private void btn_cbMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cbMouseEntered
+        btn_cb.setBackground(new Color(0,0,153));
+    }//GEN-LAST:event_btn_cbMouseEntered
 
-    private void btnSearchMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchMouseExited
-        btnSearch.setBackground(new Color(0,51,204));
-    }//GEN-LAST:event_btnSearchMouseExited
+    private void btn_cbMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cbMouseExited
+        btn_cb.setBackground(new Color(0,51,204));
+    }//GEN-LAST:event_btn_cbMouseExited
+
+    private void btn_cbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cbMouseClicked
+        // TODO add your handling code here:
+        String month = (String) cb_bulan.getSelectedItem();
+        switch(month){
+            case "Juli" -> {
+                searchByMonth(7);
+            }
+            case "Agustus" -> {
+                searchByMonth(8);
+            }
+            case "September" -> {
+                searchByMonth(9);
+            }
+            case "Oktober" -> {
+                searchByMonth(10);
+            }
+            case "November" -> {
+                searchByMonth(11);
+            }
+            case "Desember" -> {
+                searchByMonth(12);
+            }
+            default -> {
+                refreshTable();
+            }
+        }
+    }//GEN-LAST:event_btn_cbMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel btnSearch;
+    private javax.swing.JPanel btn_cb;
+    private javax.swing.JComboBox<String> cb_bulan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tb_transaksi;
     // End of variables declaration//GEN-END:variables
+
+    private void refreshTable(){
+       try {
+            DefaultTableModel m = (DefaultTableModel) tb_transaksi.getModel();
+            
+            String q = "SELECT * FROM tb_transaksi";
+            Statement s = cn.createStatement();
+            ResultSet r = s.executeQuery(q);
+            m.getDataVector().removeAllElements();
+            while (r.next()) {
+                String id_transaksi = r.getString("transaksi_id");
+                String tgl_transaksi = r.getString("tanggal_transaksi");
+                String jml_transaksi = r.getString("jumlah_transaksi");
+                Object[] data = {id_transaksi,tgl_transaksi,jml_transaksi};
+                m.addRow(data);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("error: " + e.getMessage());
+        }
+    }
+    
+    private void searchByMonth(int month){
+       try {
+            DefaultTableModel m = (DefaultTableModel) tb_transaksi.getModel();
+            
+            String q =  "SELECT * " +
+                        "FROM tb_transaksi " +
+                        "WHERE EXTRACT(MONTH FROM tanggal_transaksi) = " + month;
+            Statement s = cn.createStatement();
+            ResultSet r = s.executeQuery(q);
+            m.getDataVector().removeAllElements();
+            while (r.next()) {
+                String id_transaksi = r.getString("transaksi_id");
+                String tgl_transaksi = r.getString("tanggal_transaksi");
+                String jml_transaksi = r.getString("jumlah_transaksi");
+                Object[] data = {id_transaksi,tgl_transaksi,jml_transaksi};
+                m.addRow(data);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("error: " + e.getMessage());
+        }
+    }
+    
+    public static void centerHeaderTable(JTable t){
+        TableCellRenderer rendererFromHeader = t.getTableHeader().getDefaultRenderer();
+        JLabel headerLabel = (JLabel) rendererFromHeader;
+        headerLabel.setHorizontalAlignment(JLabel.CENTER);
+        JTableHeader header = t.getTableHeader();
+        header.setPreferredSize(new Dimension(header.getWidth(), 35));
+    }
 }
