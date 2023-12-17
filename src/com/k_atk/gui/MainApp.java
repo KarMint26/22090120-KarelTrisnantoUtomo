@@ -559,36 +559,54 @@ public class MainApp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCasherMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCasherMouseEntered
-        btnCasher.setBackground(new Color(0,0,102));
+        if(activeBtn.equals("casher")){
+            btnCasher.setBackground(new Color(0,0,153));
+        } else {
+            btnCasher.setBackground(new Color(0,0,102));
+        }
     }//GEN-LAST:event_btnCasherMouseEntered
 
     private void btnCasherMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnCasherMouseExited
         if(activeBtn.equals("casher")){
             btnCasher.setBackground(new Color(0,0,153));
+            btnMaster.setBackground(new Color(0,0,51));
+            btnTransaksi.setBackground(new Color(0,0,51));
         } else {
             btnCasher.setBackground(new Color(0,0,51));
         }
     }//GEN-LAST:event_btnCasherMouseExited
 
     private void btnMasterMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasterMouseEntered
-        btnMaster.setBackground(new Color(0,0,102));
+        if(activeBtn.equals("master")){
+            btnMaster.setBackground(new Color(0,0,153));
+        } else {
+            btnMaster.setBackground(new Color(0,0,102));
+        }
     }//GEN-LAST:event_btnMasterMouseEntered
 
     private void btnMasterMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMasterMouseExited
         if(activeBtn.equals("master")){
             btnMaster.setBackground(new Color(0,0,153));
+            btnTransaksi.setBackground(new Color(0,0,51));
+            btnCasher.setBackground(new Color(0,0,51));
         } else {
             btnMaster.setBackground(new Color(0,0,51));
         }
     }//GEN-LAST:event_btnMasterMouseExited
 
     private void btnTransaksiMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseEntered
-        btnTransaksi.setBackground(new Color(0,0,102));
+        if(activeBtn.equals("transaksi")){
+            btnTransaksi.setBackground(new Color(0,0,153));
+        } else {
+            btnTransaksi.setBackground(new Color(0,0,102));
+        }
     }//GEN-LAST:event_btnTransaksiMouseEntered
 
     private void btnTransaksiMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransaksiMouseExited
         if(activeBtn.equals("transaksi")){
             btnTransaksi.setBackground(new Color(0,0,153));
+            btnCasher.setBackground(new Color(0,0,51));
+            btnMaster.setBackground(new Color(0,0,51));
         } else {
             btnTransaksi.setBackground(new Color(0,0,51));
         }
@@ -625,6 +643,8 @@ public class MainApp extends javax.swing.JFrame {
         addRemovePanels(masterData);
         if(activeBtn.equals("master")){
             btnMaster.setBackground(new Color(0,0,153));
+            btnCasher.setBackground(new Color(0,0,51));
+            btnTransaksi.setBackground(new Color(0,0,51));
         }
     }//GEN-LAST:event_btnMasterMouseClicked
 
@@ -635,6 +655,8 @@ public class MainApp extends javax.swing.JFrame {
         addRemovePanels(casher);
         if(activeBtn.equals("casher")){
             btnCasher.setBackground(new Color(0,0,153));
+            btnMaster.setBackground(new Color(0,0,51));
+            btnTransaksi.setBackground(new Color(0,0,51));
         }
     }//GEN-LAST:event_btnCasherMouseClicked
 
@@ -645,6 +667,8 @@ public class MainApp extends javax.swing.JFrame {
         addRemovePanels(transaksi);
         if(activeBtn.equals("transaksi")){
             btnTransaksi.setBackground(new Color(0,0,153));
+            btnCasher.setBackground(new Color(0,0,51));
+            btnMaster.setBackground(new Color(0,0,51));
         }
     }//GEN-LAST:event_btnTransaksiMouseClicked
 
