@@ -29,13 +29,7 @@ public class PnMasterData extends javax.swing.JPanel {
         initComponents();
         refreshTable();
         
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < 4; i++) {
-            tb_produk.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-        
-        PnTransaksi.centerHeaderTable(tb_produk);
+        PnCasher.centeringRow(tb_produk);
     }
 
     /**

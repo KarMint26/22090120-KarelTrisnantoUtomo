@@ -7,7 +7,6 @@ package com.k_atk.panel;
 import com.k_atk.utills.ConnectionDatabase;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,12 +34,7 @@ public class PnTransaksi extends javax.swing.JPanel {
         initComponents();
         refreshTable();
         
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        for (int i = 0; i < 3; i++) {
-            tb_transaksi.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-        centerHeaderTable(tb_transaksi);
+        PnCasher.centeringRow(tb_transaksi);
     }
 
     /**
@@ -132,6 +126,7 @@ public class PnTransaksi extends javax.swing.JPanel {
 
         cb_bulan.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 14)); // NOI18N
         cb_bulan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Data", "Juli", "Agustus", "September", "Oktober", "November", "Desember" }));
+        cb_bulan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         add(cb_bulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 82, 460, 40));
     }// </editor-fold>//GEN-END:initComponents
 

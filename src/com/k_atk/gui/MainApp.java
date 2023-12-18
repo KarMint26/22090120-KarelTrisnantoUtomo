@@ -421,6 +421,7 @@ public class MainApp extends javax.swing.JFrame {
         });
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jTable1.setGridColor(new java.awt.Color(255, 255, 255));
+        jTable1.setRowHeight(30);
         jTable1.setSelectionBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setViewportView(jTable1);
 
