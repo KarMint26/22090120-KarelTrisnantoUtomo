@@ -9,6 +9,7 @@ import com.k_atk.panel.PnMasterData;
 import com.k_atk.panel.PnTransaksi;
 import java.awt.*;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -678,8 +679,12 @@ public class MainApp extends javax.swing.JFrame {
 
     private void pnLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pnLogoutMouseClicked
         SignIn signin = new SignIn();
-        signin.setVisible(true);
-        this.dispose();
+        int dialogResult = JOptionPane.showConfirmDialog(null,
+                "Apakah Anda ingin keluar ?", "Logout", JOptionPane.YES_NO_OPTION);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            signin.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_pnLogoutMouseClicked
 
     /**
