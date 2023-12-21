@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -206,11 +208,11 @@ public class PnCasher extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id Barang", "Nama Barang", "Harga", "Quantity", "Sub-Total", "Total"
+                "Id Barang", "Nama Barang", "Harga", "Quantity", "Sub-Total"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -302,6 +304,9 @@ public class PnCasher extends javax.swing.JPanel {
         btnFinish.setBackground(new java.awt.Color(204, 0, 255));
         btnFinish.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFinish.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnFinishMouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnFinishMouseEntered(evt);
             }
@@ -420,6 +425,14 @@ public class PnCasher extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_txtBayarActionPerformed
 
+    private void btnFinishMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFinishMouseClicked
+        int dialogResult = JOptionPane.showConfirmDialog(null,
+                "Apakah Anda ingin menyelesaikan transaksi?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            finishTransaksi();
+        }
+    }//GEN-LAST:event_btnFinishMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnHome;
@@ -460,6 +473,43 @@ public class PnCasher extends javax.swing.JPanel {
         }
         centerHeaderTable(j);
     }
+    
+    private String generateTransaksiID() {
+        String transaksiID = "";
+        try {
+            Statement s = cn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT MAX(transaksi_id) AS max_id FROM tb_transaksi");
+            if(rs.next()){
+                String maxId = rs.getString("max_id");
+            
+                // Mengambil angka dari ID transaksi terakhir
+                int id = Integer.parseInt(maxId.substring(maxId.length() - 3));
+      
+                // Menambahkan 1 untuk mendapatkan ID transaksi berikutnya
+                id++;
+      
+                // Menghasilkan ID transaksi berikutnya
+                if(id < 100){
+                    transaksiID += "ID0" + id;
+                } else {
+                    transaksiID += "ID" + id;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return transaksiID;
+    }
+
+    
+    private String generateTanggalTransaksi() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String tanggalTransaksi = formatter.format(date);
+        return tanggalTransaksi;
+    }
+
     
     private void refreshCasher(){
         txtSubTotalBarang.setText(String.valueOf(subTotal));
@@ -505,7 +555,23 @@ public class PnCasher extends javax.swing.JPanel {
             
             DefaultTableModel m = (DefaultTableModel) tb_casher.getModel();
             
-            Object[] data = {idProduk, namaProd, hargaProd, txtQty.getText(), subTotal, total};
+            for (int i = 0; i < m.getRowCount(); i++) {
+                if (m.getValueAt(i, 0).equals(idProduk) && m.getValueAt(i, 1).equals(namaProd)) {
+                    int qty = Integer.parseInt(m.getValueAt(i, 3).toString()) + Integer.parseInt(txtQty.getText());
+                    int newSubTotal = Integer.parseInt(m.getValueAt(i, 4).toString()) + subTotal;
+                    m.setValueAt(qty, i, 3);
+                    m.setValueAt(newSubTotal, i, 4);
+                    txtTotalBayar.setText(String.valueOf(total));
+                    txtNamaBarang.setText("");
+                    txtHarga.setText("");
+                    txtSubTotalBarang.setText("");
+                    stok_prod.setText("Stok : ");
+                    txtQty.setText("");
+                    return;
+                }
+            }
+            
+            Object[] data = {idProduk, namaProd, hargaProd, txtQty.getText(), subTotal};
             m.addRow(data);
             txtTotalBayar.setText(String.valueOf(total));
             txtNamaBarang.setText("");
@@ -513,6 +579,7 @@ public class PnCasher extends javax.swing.JPanel {
             txtSubTotalBarang.setText("");
             stok_prod.setText("Stok : ");
             txtQty.setText("");
+            txtId.requestFocus();
         } else {
             JOptionPane.showMessageDialog(null, "Please Fill All Data", "Empty Text Field", JOptionPane.WARNING_MESSAGE);
         }
@@ -543,11 +610,36 @@ public class PnCasher extends javax.swing.JPanel {
             
             model.removeRow(selectedRow); // Hapus baris dari model
             txtTotalBayar.setText(String.valueOf(total));
-            model.setValueAt(total, selectedRow, model.getColumnCount()-1);
         } else {
             // Sampaikan pesan kesalahan kepada pengguna jika tidak ada baris yang dipilih
             JOptionPane.showMessageDialog(this, "Pilih baris yang ingin dihapus.");
         }
+    }
+    
+    private void finishTransaksi() {
+        String idTransaksi = generateTransaksiID();
+        String tanggalTransaksi = generateTanggalTransaksi();
+
+        try {
+            Statement s = cn.createStatement();
+            String q = "INSERT INTO tb_transaksi VALUES "
+                    + "('" + idTransaksi + "', '" + tanggalTransaksi + "', " + total + ")";
+            s.executeUpdate(q);
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tb_casher.getModel();
+        model.setRowCount(0);
+        txtBayar.setText("");
+        txtHarga.setText("");
+        txtId.setText("");
+        txtKembali.setText("");
+        txtNamaBarang.setText("");
+        txtQty.setText("");
+        txtSubTotalBarang.setText("");
+        txtTotalBayar.setText("");
+        stok_prod.setText("Stok : ");
     }
 
 }
