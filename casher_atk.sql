@@ -1,28 +1,53 @@
-CREATE DATABASE IF NOT EXISTS `k_atk` 
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               8.0.30 - MySQL Community Server - GPL
+-- Server OS:                    Win64
+-- HeidiSQL Version:             12.1.0.6537
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Dumping database structure for k_atk
+CREATE DATABASE IF NOT EXISTS `k_atk` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `k_atk`;
 
+-- Dumping structure for table k_atk.tb_produk
 CREATE TABLE IF NOT EXISTS `tb_produk` (
   `produk_id` char(5) NOT NULL,
   `nama_produk` varchar(100) NOT NULL,
   `harga_produk` int NOT NULL,
   `stok_produk` int NOT NULL,
   PRIMARY KEY (`produk_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Dumping data for table k_atk.tb_produk: ~8 rows (approximately)
 REPLACE INTO `tb_produk` (`produk_id`, `nama_produk`, `harga_produk`, `stok_produk`) VALUES
 	('K0001', 'Pulpen', 5000, 180),
 	('K0002', 'Buku', 3500, 220),
 	('K0003', 'Penggaris', 8000, 100),
 	('K0004', 'Penghapus', 2500, 300),
-	('K0005', 'Pensil', 3000, 250);
+	('K0005', 'Pensil', 3000, 250),
+	('K0006', 'Rautan Pensil', 2000, 400),
+	('K0007', 'Buku Gambar', 12000, 150),
+	('K0008', 'Tipe X', 7000, 500);
 
+-- Dumping structure for table k_atk.tb_transaksi
 CREATE TABLE IF NOT EXISTS `tb_transaksi` (
   `transaksi_id` char(5) NOT NULL,
   `tanggal_transaksi` date NOT NULL,
   `jumlah_transaksi` int NOT NULL,
   PRIMARY KEY (`transaksi_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Dumping data for table k_atk.tb_transaksi: ~56 rows (approximately)
 REPLACE INTO `tb_transaksi` (`transaksi_id`, `tanggal_transaksi`, `jumlah_transaksi`) VALUES
 	('ID001', '2023-07-01', 25000),
 	('ID002', '2023-07-05', 21000),
@@ -77,14 +102,24 @@ REPLACE INTO `tb_transaksi` (`transaksi_id`, `tanggal_transaksi`, `jumlah_transa
 	('ID051', '2023-12-01', 25000),
 	('ID052', '2023-12-05', 21000),
 	('ID053', '2023-12-10', 30000),
-	('ID054', '2023-12-15', 28000);
+	('ID054', '2023-12-15', 28000),
+	('ID055', '2023-12-21', 50500),
+	('ID056', '2023-12-21', 32500);
 
+-- Dumping structure for table k_atk.tb_user
 CREATE TABLE IF NOT EXISTS `tb_user` (
   `user_id` char(3) NOT NULL,
   `username` varchar(25) NOT NULL,
   `password` varchar(25) NOT NULL,
   PRIMARY KEY (`user_id`)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Dumping data for table k_atk.tb_user: ~0 rows (approximately)
 REPLACE INTO `tb_user` (`user_id`, `username`, `password`) VALUES
 	('01A', 'admin', 'admin2611');
+
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
