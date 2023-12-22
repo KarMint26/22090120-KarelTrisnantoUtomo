@@ -105,6 +105,7 @@ public class PnCasher extends javax.swing.JPanel {
         jLabel13.setText("Sub-Total (Rp) :");
         PnHome.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(54, 220, -1, -1));
 
+        txtId.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtId.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         txtId.setMargin(new java.awt.Insets(2, 16, 2, 6));
         txtId.addActionListener(new java.awt.event.ActionListener() {
@@ -114,14 +115,17 @@ public class PnCasher extends javax.swing.JPanel {
         });
         PnHome.add(txtId, new org.netbeans.lib.awtextra.AbsoluteConstraints(172, 25, 140, 33));
 
+        txtNamaBarang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtNamaBarang.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         txtNamaBarang.setPreferredSize(new java.awt.Dimension(71, 32));
         PnHome.add(txtNamaBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(172, 70, 364, -1));
 
+        txtHarga.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtHarga.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         txtHarga.setPreferredSize(new java.awt.Dimension(64, 32));
         PnHome.add(txtHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(172, 117, 364, -1));
 
+        txtQty.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtQty.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         txtQty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -130,6 +134,7 @@ public class PnCasher extends javax.swing.JPanel {
         });
         PnHome.add(txtQty, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, 140, 30));
 
+        txtSubTotalBarang.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtSubTotalBarang.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         PnHome.add(txtSubTotalBarang, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, 364, 30));
 
@@ -180,6 +185,7 @@ public class PnCasher extends javax.swing.JPanel {
         jLabel16.setText("Total (Rp) :");
         PnHome.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(692, 36, -1, -1));
 
+        txtTotalBayar.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         txtTotalBayar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         PnHome.add(txtTotalBayar, new org.netbeans.lib.awtextra.AbsoluteConstraints(692, 70, 190, 40));
 
@@ -187,6 +193,7 @@ public class PnCasher extends javax.swing.JPanel {
         jLabel17.setText("Bayar (Rp) : ");
         PnHome.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(692, 120, -1, -1));
 
+        txtBayar.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         txtBayar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         txtBayar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -199,6 +206,7 @@ public class PnCasher extends javax.swing.JPanel {
         jLabel18.setText("Kembali (Rp) : ");
         PnHome.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 210, -1, -1));
 
+        txtKembali.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         txtKembali.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 2, true));
         PnHome.add(txtKembali, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 240, 190, 40));
 
@@ -581,7 +589,8 @@ public class PnCasher extends javax.swing.JPanel {
             txtQty.setText("");
             txtId.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(null, "Please Fill All Data", "Empty Text Field", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Please Fill All Data", 
+                    "Empty Text Field", JOptionPane.WARNING_MESSAGE);
         }
     }
     

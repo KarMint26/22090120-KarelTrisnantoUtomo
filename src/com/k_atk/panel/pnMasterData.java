@@ -9,8 +9,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,6 +20,7 @@ public class PnMasterData extends javax.swing.JPanel {
     public Statement st; // memberikan statement perintah sql, select insert delete
     public ResultSet rs; // membaca data di dalam db, membaca record di db
     Connection cn = ConnectionDatabase.OpenConnection();
+    public static String produkId = "";
 
     /**
      * Creates new form pnMasterData
@@ -30,6 +30,7 @@ public class PnMasterData extends javax.swing.JPanel {
         refreshTable();
         
         PnCasher.centeringRow(tb_produk);
+        txtNama.requestFocus();
     }
 
     /**
@@ -44,38 +45,161 @@ public class PnMasterData extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tb_produk = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtNama = new javax.swing.JTextField();
+        txtHarga = new javax.swing.JTextField();
+        txtStok = new javax.swing.JTextField();
+        btnAdd = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 28)); // NOI18N
-        jLabel1.setText("DATA PRODUK");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, -1, -1));
+        jLabel1.setText("INVENTORI DATA PRODUK");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, -1, -1));
 
         tb_produk.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "ID Produk", "Nama Produk", "Harga Produk", "Stok Produk"
+                "Nama Produk", "Harga Produk", "Stok Produk"
             }
         ));
+        tb_produk.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tb_produk.setGridColor(new java.awt.Color(102, 102, 102));
         tb_produk.setRowHeight(40);
-        tb_produk.setSelectionBackground(new java.awt.Color(204, 204, 204));
+        tb_produk.setSelectionBackground(new java.awt.Color(51, 51, 51));
         tb_produk.setShowGrid(true);
+        tb_produk.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tb_produkMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tb_produk);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 257, 720, 240));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 110, 540, 360));
+
+        jLabel2.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 14)); // NOI18N
+        jLabel2.setText("Stok Produk : ");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 260, -1, -1));
+
+        jLabel3.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 14)); // NOI18N
+        jLabel3.setText("Nama Produk : ");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 14)); // NOI18N
+        jLabel4.setText("Harga Produk : ");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
+        add(txtNama, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 210, 40));
+        add(txtHarga, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 210, 40));
+        add(txtStok, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, 210, 40));
+
+        btnAdd.setBackground(new java.awt.Color(0, 0, 153));
+        btnAdd.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnAdd.setForeground(new java.awt.Color(255, 255, 255));
+        btnAdd.setText("TAMBAH");
+        btnAdd.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddMouseClicked(evt);
+            }
+        });
+        add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 310, 210, 40));
+
+        btnEdit.setBackground(new java.awt.Color(255, 153, 0));
+        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnEdit.setText("UPDATE");
+        btnEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEditMouseClicked(evt);
+            }
+        });
+        add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 370, 100, 40));
+
+        btnDelete.setBackground(new java.awt.Color(204, 0, 0));
+        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("HAPUS");
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnDelete.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteMouseClicked(evt);
+            }
+        });
+        add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 100, 40));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Management Data Produk Toko Alat Tulis Kantor");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 60, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditMouseClicked
+        updateProduk();
+    }//GEN-LAST:event_btnEditMouseClicked
+
+    private void tb_produkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_produkMouseClicked
+        DefaultTableModel m = (DefaultTableModel) tb_produk.getModel();
+        int selectedRow = tb_produk.getSelectedRow();
+        
+        String nama = String.valueOf(m.getValueAt(selectedRow, 0));
+        String harga = String.valueOf(m.getValueAt(selectedRow, 1));
+        String stok = String.valueOf(m.getValueAt(selectedRow, 2));
+        
+        txtNama.setText(nama);
+        txtHarga.setText(harga);
+        txtStok.setText(stok);
+        
+        try {
+            String q = "SELECT * FROM tb_produk WHERE nama_produk = '" + nama + "'";
+            Statement s = cn.createStatement();
+            ResultSet rs = s.executeQuery(q);
+            
+            if(rs.next()){
+                produkId = rs.getString("produk_id");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_tb_produkMouseClicked
+
+    private void btnAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddMouseClicked
+        addProduk();
+    }//GEN-LAST:event_btnAddMouseClicked
+
+    private void btnDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteMouseClicked
+        deleteProduk();
+    }//GEN-LAST:event_btnDeleteMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tb_produk;
+    private javax.swing.JTextField txtHarga;
+    private javax.swing.JTextField txtNama;
+    private javax.swing.JTextField txtStok;
     // End of variables declaration//GEN-END:variables
 
     private void refreshTable(){
@@ -87,16 +211,106 @@ public class PnMasterData extends javax.swing.JPanel {
             ResultSet r = s.executeQuery(q);
             m.getDataVector().removeAllElements();
             while (r.next()) {
-                String id_produk = r.getString("produk_id");
                 String nama = r.getString("nama_produk");
                 int harga = r.getInt("harga_produk");
                 int stok = r.getInt("stok_produk");
-                Object[] data = {id_produk,nama,harga,stok};
+                Object[] data = {nama,harga,stok};
                 m.addRow(data);
             }
-
+            
+            txtNama.setText("");
+            txtHarga.setText("");
+            txtStok.setText("");
+            txtNama.requestFocus();
         } catch (SQLException e) {
             System.out.println("error: " + e.getMessage());
+        }
+    }
+    
+     private String generateProdukID() {
+        String transaksiID = "";
+        try {
+            Statement s = cn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT MAX(produk_id) AS max_id FROM tb_produk");
+            if(rs.next()){
+                String maxId = rs.getString("max_id");
+            
+                // Mengambil angka dari ID transaksi terakhir
+                int id = Integer.parseInt(maxId.substring(maxId.length() - 4));
+      
+                // Menambahkan 1 untuk mendapatkan ID transaksi berikutnya
+                id++;
+      
+                // Menghasilkan ID transaksi berikutnya
+                if(id < 10){
+                    transaksiID += "K000" + id;
+                } else if(id >= 10 && id < 100) {
+                    transaksiID += "K00" + id;
+                } else if(id >= 100 && id < 1000){
+                    transaksiID += "K0" + id;
+                } else {
+                    transaksiID += "K" + id;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        return transaksiID;
+    }
+    
+    private void addProduk() {
+        String id_prod = generateProdukID();
+        String nama = txtNama.getText();
+        int harga = Integer.parseInt(txtHarga.getText());
+        int stok = Integer.parseInt(txtStok.getText());
+        
+        try {
+            Statement s = cn.createStatement();
+            String q = "INSERT INTO tb_produk VALUES ('" + id_prod + "', '" + nama + "', " + harga + ", " + stok + ")";
+
+            s.executeUpdate(q);
+            
+            refreshTable();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    private void updateProduk() {
+        try {
+            Statement s = cn.createStatement();
+            String q = "UPDATE tb_produk SET nama_produk = '" + txtNama.getText() + "', "
+                        + "harga_produk = " + txtHarga.getText() + ", "
+                        + "stok_produk = " + txtStok.getText()
+                        + " WHERE produk_id = '" + produkId + "'";
+
+            s.executeUpdate(q);
+            
+            refreshTable();
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+    
+    private void deleteProduk(){
+        DefaultTableModel m = (DefaultTableModel) tb_produk.getModel();
+        int selectedRow = tb_produk.getSelectedRow();
+        
+        int dialogResult = JOptionPane.showConfirmDialog(null,
+                "Apakah Anda ingin menghapus produk?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if(dialogResult == JOptionPane.YES_OPTION){
+            try {
+                Statement s = cn.createStatement();
+                String q = "DELETE FROM tb_produk WHERE nama_produk = '" + m.getValueAt(tb_produk.getSelectedRow(),
+                        0).toString() + "'";
+                s.executeUpdate(q);
+                m.removeRow(selectedRow);            
+            
+                refreshTable();
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
         }
     }
 }
