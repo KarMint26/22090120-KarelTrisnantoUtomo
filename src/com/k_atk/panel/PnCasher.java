@@ -6,7 +6,7 @@ package com.k_atk.panel;
 
 import static com.k_atk.panel.PnTransaksi.centerHeaderTable;
 import com.k_atk.utills.ConnectionDatabase;
-import java.awt.Color;
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +18,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import java.awt.image.BufferedImage;
+import java.io.FileOutputStream;
+import javax.swing.SwingUtilities;
+import java.io.ByteArrayOutputStream;
+import javax.imageio.ImageIO;
+import javax.swing.JFrame;
 /**
  *
  * @author karel
@@ -216,7 +228,7 @@ public class PnCasher extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Id Barang", "Nama Barang", "Harga", "Quantity", "Sub-Total"
+                "ID Barang", "Nama Barang", "Harga", "Quantity", "Sub-Total"
             }
         ) {
             Class[] types = new Class [] {
@@ -534,6 +546,7 @@ public class PnCasher extends javax.swing.JPanel {
     }
     
     private void generateDataFromDB() {
+        DefaultTableModel model = (DefaultTableModel) tb_casher.getModel();
         try {
             String q = "SELECT * FROM tb_produk WHERE produk_id = '" + txtId.getText() + "'";
             Statement s = cn.createStatement();
@@ -551,10 +564,77 @@ public class PnCasher extends javax.swing.JPanel {
         } catch (SQLException e) {
             System.out.println("error: " + e.getMessage());
         }
-        if(txtNamaBarang != null){
-            txtId.setText("");
-            txtId.requestFocus();
+        
+        if(model.getRowCount() == 0){
+            Object[] data = new Object[]{
+                txtId.getText(), txtNamaBarang.getText(), Integer.valueOf(txtHarga.getText()),
+                1, Integer.valueOf(txtSubTotalBarang.getText())
+            };
+            model.addRow(data);
+        } else {
+            boolean found = false;
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (model.getValueAt(i, 0).equals(txtId.getText())){
+                    if(txtQty.getText().equals("")){
+                        model.setValueAt(Integer.parseInt(model.getValueAt(i, 3).toString())+1, i, 3);
+                    } else {
+                        model.setValueAt(Integer.valueOf(txtQty.getText()), i, 3);
+                    }
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Object[] data = new Object[]{
+                    txtId.getText(), txtNamaBarang.getText(), Integer.valueOf(txtHarga.getText()),
+                    1, Integer.valueOf(txtSubTotalBarang.getText())
+                };
+                model.addRow(data);
+            }
+            
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if(model.getValueAt(i, 0).equals(txtId.getText())){
+                    try {
+                        Statement s = cn.createStatement();
+                        String q = "";
+            
+                        boolean isQtyCustom = false;
+                        if(txtQty.getText().equals("")){
+                            q += "UPDATE tb_produk SET stok_produk = (stok_produk - 1) WHERE produk_id = '" + txtId.getText() + "'";
+                            isQtyCustom = true;
+                        }
+                        
+                        if(!isQtyCustom){
+                            q += "UPDATE tb_produk SET stok_produk = (stok_produk + " 
+                                    + Integer.valueOf(model.getValueAt(i, 3).toString()) + " - " 
+                                    + Integer.valueOf(txtQty.getText()) 
+                                    + ") WHERE produk_id = '" + txtId.getText() + "'";
+                            System.out.println(q);
+                        }
+                        System.out.println(isQtyCustom);
+            
+                        s.executeUpdate(q);
+                    } catch (SQLException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    break;
+                }
+            }
         }
+        
+        try {
+            String q = "SELECT * FROM tb_produk WHERE produk_id = '" + txtId.getText() + "'";
+            Statement s = cn.createStatement();
+            ResultSet r = s.executeQuery(q);
+            while (r.next()) {
+                stok_prod.setText("Stok : " + String.valueOf(r.getInt("stok_produk")));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        txtId.setText("");
+        txtId.requestFocus();
     }
     
     private void addDataTable(){
@@ -565,7 +645,18 @@ public class PnCasher extends javax.swing.JPanel {
             
             for (int i = 0; i < m.getRowCount(); i++) {
                 if (m.getValueAt(i, 0).equals(idProduk) && m.getValueAt(i, 1).equals(namaProd)) {
-                    int qty = Integer.parseInt(m.getValueAt(i, 3).toString()) + Integer.parseInt(txtQty.getText());
+                    try {
+                        Statement s = cn.createStatement();
+                        String q = "UPDATE tb_produk SET stok_produk = (stok_produk + "
+                                + Integer.valueOf(m.getValueAt(i, 3).toString()) + " - "
+                                + Integer.valueOf(txtQty.getText()) + ") WHERE produk_id = '" + idProduk + "'";
+            
+                        s.executeUpdate(q);
+                    } catch (SQLException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    
+                    int qty = Integer.parseInt(txtQty.getText());
                     int newSubTotal = Integer.parseInt(m.getValueAt(i, 4).toString()) + subTotal;
                     m.setValueAt(qty, i, 3);
                     m.setValueAt(newSubTotal, i, 4);
@@ -628,7 +719,24 @@ public class PnCasher extends javax.swing.JPanel {
     private void finishTransaksi() {
         String idTransaksi = generateTransaksiID();
         String tanggalTransaksi = generateTanggalTransaksi();
-
+        int totalBayar = Integer.parseInt(txtBayar.getText());
+        int kembalianByr = Integer.parseInt(txtKembali.getText());
+        
+        DefaultTableModel mm = (DefaultTableModel) tb_casher.getModel();
+        
+        for (int i = 0; i < mm.getRowCount(); i++) {
+            try {
+                Statement s = cn.createStatement();
+                String q = "INSERT INTO tb_struk VALUES (" + (i+1) + ", '" + mm.getValueAt(i, 1)
+                        + "', " + mm.getValueAt(i, 2) + ", " + mm.getValueAt(i, 3)
+                        + ", " + mm.getValueAt(i, 4) + ")";
+                    
+                s.executeUpdate(q);
+            } catch (SQLException e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        }
+        
         try {
             Statement s = cn.createStatement();
             String q = "INSERT INTO tb_transaksi VALUES "
@@ -636,6 +744,36 @@ public class PnCasher extends javax.swing.JPanel {
             s.executeUpdate(q);
         } catch (SQLException e) {
             System.out.println("Error: " + e.getMessage());
+        }
+        
+        // Cetak JPanel ke file PDF.
+        StrukDesign component = new StrukDesign(); // Ganti dengan nama variabel JPanel Anda.
+        component.setTotalHarga(total);
+        component.setTotalBayar(totalBayar);
+        component.setKembalianBayar(kembalianByr);
+        component.loadCasherData();
+        
+        // Asumsikan StrukDesign adalah JComponent Anda
+        JFrame frame = new JFrame();
+        frame.setContentPane(component);
+        frame.pack();
+        frame.setVisible(false);
+
+        BufferedImage bufferedImage = SwingUtilities.getWindowAncestor(component).getGraphicsConfiguration().createCompatibleImage(component.getWidth(), component.getHeight());
+        component.paint(bufferedImage.getGraphics());
+        try {
+            PdfWriter writer = new PdfWriter(new FileOutputStream("C:\\Users\\user\\Downloads\\hasilstruk\\struk.pdf"));
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bufferedImage, "png", baos);
+            byte[] bytes = baos.toByteArray();
+            ImageData imageData = ImageDataFactory.create(bytes);
+            Image image = new Image(imageData);
+            document.add(image);
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         
         DefaultTableModel model = (DefaultTableModel) tb_casher.getModel();
