@@ -546,7 +546,6 @@ public class PnCasher extends javax.swing.JPanel {
     }
     
     private void generateDataFromDB() {
-        DefaultTableModel model = (DefaultTableModel) tb_casher.getModel();
         try {
             String q = "SELECT * FROM tb_produk WHERE produk_id = '" + txtId.getText() + "'";
             Statement s = cn.createStatement();
@@ -565,74 +564,6 @@ public class PnCasher extends javax.swing.JPanel {
             System.out.println("error: " + e.getMessage());
         }
         
-        if(model.getRowCount() == 0){
-            Object[] data = new Object[]{
-                txtId.getText(), txtNamaBarang.getText(), Integer.valueOf(txtHarga.getText()),
-                1, Integer.valueOf(txtSubTotalBarang.getText())
-            };
-            model.addRow(data);
-        } else {
-            boolean found = false;
-            for (int i = 0; i < model.getRowCount(); i++) {
-                if (model.getValueAt(i, 0).equals(txtId.getText())){
-                    if(txtQty.getText().equals("")){
-                        model.setValueAt(Integer.parseInt(model.getValueAt(i, 3).toString())+1, i, 3);
-                    } else {
-                        model.setValueAt(Integer.valueOf(txtQty.getText()), i, 3);
-                    }
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Object[] data = new Object[]{
-                    txtId.getText(), txtNamaBarang.getText(), Integer.valueOf(txtHarga.getText()),
-                    1, Integer.valueOf(txtSubTotalBarang.getText())
-                };
-                model.addRow(data);
-            }
-            
-            for (int i = 0; i < model.getRowCount(); i++) {
-                if(model.getValueAt(i, 0).equals(txtId.getText())){
-                    try {
-                        Statement s = cn.createStatement();
-                        String q = "";
-            
-                        boolean isQtyCustom = false;
-                        if(txtQty.getText().equals("")){
-                            q += "UPDATE tb_produk SET stok_produk = (stok_produk - 1) WHERE produk_id = '" + txtId.getText() + "'";
-                            isQtyCustom = true;
-                        }
-                        
-                        if(!isQtyCustom){
-                            q += "UPDATE tb_produk SET stok_produk = (stok_produk + " 
-                                    + Integer.valueOf(model.getValueAt(i, 3).toString()) + " - " 
-                                    + Integer.valueOf(txtQty.getText()) 
-                                    + ") WHERE produk_id = '" + txtId.getText() + "'";
-                            System.out.println(q);
-                        }
-                        System.out.println(isQtyCustom);
-            
-                        s.executeUpdate(q);
-                    } catch (SQLException e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
-                }
-            }
-        }
-        
-        try {
-            String q = "SELECT * FROM tb_produk WHERE produk_id = '" + txtId.getText() + "'";
-            Statement s = cn.createStatement();
-            ResultSet r = s.executeQuery(q);
-            while (r.next()) {
-                stok_prod.setText("Stok : " + String.valueOf(r.getInt("stok_produk")));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        
         txtId.setText("");
         txtId.requestFocus();
     }
@@ -645,18 +576,7 @@ public class PnCasher extends javax.swing.JPanel {
             
             for (int i = 0; i < m.getRowCount(); i++) {
                 if (m.getValueAt(i, 0).equals(idProduk) && m.getValueAt(i, 1).equals(namaProd)) {
-                    try {
-                        Statement s = cn.createStatement();
-                        String q = "UPDATE tb_produk SET stok_produk = (stok_produk + "
-                                + Integer.valueOf(m.getValueAt(i, 3).toString()) + " - "
-                                + Integer.valueOf(txtQty.getText()) + ") WHERE produk_id = '" + idProduk + "'";
-            
-                        s.executeUpdate(q);
-                    } catch (SQLException e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    
-                    int qty = Integer.parseInt(txtQty.getText());
+                    int qty = Integer.parseInt(txtQty.getText()) + Integer.parseInt(m.getValueAt(i, 3).toString());
                     int newSubTotal = Integer.parseInt(m.getValueAt(i, 4).toString()) + subTotal;
                     m.setValueAt(qty, i, 3);
                     m.setValueAt(newSubTotal, i, 4);
