@@ -13,10 +13,18 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+import java.io.File;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 
 /**
  *
@@ -52,6 +60,7 @@ public class PnTransaksi extends javax.swing.JPanel {
         btn_cb = new javax.swing.JPanel();
         jLabel19 = new javax.swing.JLabel();
         cb_bulan = new javax.swing.JComboBox<>();
+        btnReport = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(926, 734));
@@ -87,7 +96,7 @@ public class PnTransaksi extends javax.swing.JPanel {
         tb_transaksi.setShowGrid(true);
         jScrollPane1.setViewportView(tb_transaksi);
 
-        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 760, 350));
+        add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 760, 300));
 
         btn_cb.setBackground(new java.awt.Color(0, 51, 204));
         btn_cb.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -128,6 +137,18 @@ public class PnTransaksi extends javax.swing.JPanel {
         cb_bulan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semua Data", "Juli", "Agustus", "September", "Oktober", "November", "Desember" }));
         cb_bulan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         add(cb_bulan, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 82, 460, 40));
+
+        btnReport.setBackground(new java.awt.Color(51, 0, 204));
+        btnReport.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnReport.setForeground(new java.awt.Color(255, 255, 255));
+        btnReport.setText("REPORT TRANSAKSI");
+        btnReport.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnReport.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnReportMouseClicked(evt);
+            }
+        });
+        add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 460, 150, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cbMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btn_cbMouseEntered
@@ -166,8 +187,21 @@ public class PnTransaksi extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btn_cbMouseClicked
 
+    private void btnReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnReportMouseClicked
+        try {
+            String reportPath = "../report/transaksi.jasper";
+            JasperPrint jp = JasperFillManager.fillReport(getClass().
+                getResourceAsStream(reportPath),
+                    null, ConnectionDatabase.OpenConnection());
+            JasperViewer.viewReport(jp, false);
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnReportMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnReport;
     private javax.swing.JPanel btn_cb;
     private javax.swing.JComboBox<String> cb_bulan;
     private javax.swing.JLabel jLabel1;
